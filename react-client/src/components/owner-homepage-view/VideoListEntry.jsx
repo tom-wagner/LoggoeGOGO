@@ -2,6 +2,8 @@ import React from 'react';
 import Paper from 'material-ui/Paper';
 import { DragSource } from 'react-dnd';
 import { ItemTypes } from '../../constants.js';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import RaisedButton from 'material-ui/RaisedButton';
 
 
 const videoSource = {
@@ -23,7 +25,7 @@ function collect(connect, monitor) {
 class VideoListEntry extends React.Component {
 
   render() {
-    const { video, redirect, deleteVideo, connectDragSource } = this.props;
+    const { video, redirect, btnClickFunc, btnClickAction, connectDragSource } = this.props;
     return connectDragSource(
       <div>
         <Paper style={style} key={video.id}>
@@ -36,8 +38,12 @@ class VideoListEntry extends React.Component {
             <div style={{width: '50%', float: 'right'}}>
               <div className="videoTitle" style={{fontWeight: 'bold'}} onClick={()=>{redirect(video)}}> {video.title} </div>
               <br/>
-              <div style={{color: 'grey'}}>{video.description}</div>
-              <button onClick={() => {deleteVideo(video)}}>Remove from Videos</button>
+              <div style={{color: 'grey', marginBottom: '10px'}}>{video.description}</div>
+              <RaisedButton style={{padding: '5px', height: 'auto'}} onClick={() => {btnClickFunc(video)}}>
+              {btnClickAction}
+              <br/>
+                <DeleteIcon></DeleteIcon>
+              </RaisedButton>
               <br/>
             </div>
           </div>
@@ -47,14 +53,15 @@ class VideoListEntry extends React.Component {
   }
 }
 
-
 const style = {
   height: 'auto',
   width: 'auto',
   margin: '30px',
   textAlign: 'center',
   display: 'block',
-  padding: '30px 5px'
+  padding: '30px 5px',
+  cursor: 'move',
+  wordWrap: 'break-word'
 }
 
 export default DragSource(ItemTypes.SAVED, videoSource, collect)(VideoListEntry);

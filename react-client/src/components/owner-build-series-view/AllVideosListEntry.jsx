@@ -2,6 +2,7 @@ import React from 'react';
 import Paper from 'material-ui/Paper';
 import { DragSource } from 'react-dnd';
 import { ItemTypes } from '../../constants.js';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const searchSource = {
   beginDrag(props) {
@@ -36,7 +37,7 @@ class AllVideosListEntry extends React.Component {
               <br/>
               <div style={{color: 'grey'}}> {video.description} </div>
               <br/>
-              <button onClick={() => { addToSeries(video) }}>Add to Series</button>
+              <RaisedButton style={{padding: '5px'}} onClick={() => { addToSeries(video) }}>Add to Series</RaisedButton>
             </div>
           </div>
         </Paper>
@@ -52,7 +53,8 @@ const style = {
   textAlign: 'center',
   display: 'block',
   padding: '30px 5px',
-  wordWrap: 'break-word'
+  wordWrap: 'break-word',
+  cursor: 'move',
 }
 
 export default DragSource(ItemTypes.VIDEO, searchSource, collect)(AllVideosListEntry);

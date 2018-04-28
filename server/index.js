@@ -4,6 +4,7 @@ const moment = require('moment');
 const axios = require('axios');
 const session = require('express-session');
 const path = require('path')
+const childProcess = require('child_process');
 const {
   getOwnerTimestamp,
   getCurrentVideo,
@@ -23,9 +24,13 @@ const {
   postChats,
   getUploads,
   setUploads,
+  deleteUpload,
   setTeacherComment,
   getOwnerComments,
-  deleteOwnerComment
+  deleteOwnerComment,
+  saveSeries,
+  getTimestamps,
+  removeFromSeries,
 } = require('../database-mysql');
 
 const searchYouTube = require ('youtube-search-api-with-axios');
@@ -44,6 +49,38 @@ app.use(express.static(__dirname + '/../react-client/dist'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
+//---------------------------------------------------------VISUALIZATION DATA
+
+app.get('/vis-data', (req, res) => {
+  const VIDEO_ID = req.query.videoId;
+  console.log('got vis data request', VIDEO_ID);
+  getTimestamps(VIDEO_ID, (comments) => {
+    console.log('VIDEO COMMENTS', comments.map(d => d.timeStamp).join(','));
+    var child = childProcess.spawn('python',
+      ['server/dpgmm/dpgmm_script.py', comments.map(d => d.timeStamp).join(',')]);
+    child.stdout.on('data', (data) => {
+      data = data.toString();
+      console.log('TERMINATED', data);
+      if (data[0] !== '[') {
+        res.status(400).send('NOT ENOUGH DATA');
+      } else {
+        getCurrentVideo(VIDEO_ID, (results) => {
+          res.status(200).send({
+            data: JSON.parse(data),
+            length: results[0].duration / 60,
+            comments: comments.map(d => d.comment)
+          });
+        })
+      }
+    });
+    child.on('error', (err) => {
+      console.log('ERROR', err);
+    })
+    child.on('exit', (code, signal) => {
+      console.log(`child process exited with code ${code} and signal ${signal}`);
+    });
+  });
+})
 //---------------------------------------------------------USER LOGIN
 
 app.post('/login', (req, res) => {
@@ -51,14 +88,22 @@ app.post('/login', (req, res) => {
     if (err) {
       res.status(403).send(err);
     } else {
+      if (response.length === 0) {
+        res.status(403).send('user not found');
+        return;
+      }
       req.session.regenerate((err) => {
         if (err) {
           console.log(err);
         }
-        req.session.user = response[0].name;
-        req.session.isOwner = response[0].owner;
-        req.session.userId = response[0].id;
-        res.status(201).send(response);
+        if (response.length === 0) {
+          res.status(404).send('Username not found');
+        } else {
+          req.session.user = response[0].name;
+          req.session.isOwner = response[0].owner;
+          req.session.userId = response[0].id;
+          res.status(201).send(response);
+        }
       })
     }
   });
@@ -73,26 +118,34 @@ app.post('/register', (req, res) => {
     let isExist = !!response.length;
 
     if (isExist) {
-      req.session.regenerate((err) => {
-        if (err) {
-          console.log(err);
-          res.status(403).send(err);
-          return;
-        }
-        req.session.user = response[0].name;
-        req.session.isOwner = response[0].owner;
         res.status(201).send(true);
-      })
-    } 
+    }
     else {
-      setUser(req.body, (err, response) => 
-        (err) ? 
-          res.status(403).send(err) :
-          res.status(201).send(false)
+      setUser(req.body, (err, response) => {
+        getUser(req.body.username, (err, response) => {
+          req.session.regenerate((err) => {
+            if (err) {
+              console.log(err);
+            }
+            req.session.user = response[0].name;
+            req.session.isOwner = response[0].owner;
+            req.session.userId = response[0].id;
+            res.status(201).send(false)
+          })
+          }
+          );
+        }
       )      
     }
 
   })
+})
+
+//---------------------------------------------------------USER REGISTRATION
+
+app.post('/logout', (req, res) => {
+  req.session.destroy();
+  res.status(200).send('yay');
 })
 
 //---------------------------------------------------------USER ID
@@ -156,24 +209,26 @@ app.get('/owner/searchYoutube', (req, res) => {
   )
 })
 
-app.post('/owner/save', (req, res) => {
+app.post('/owner/video', (req, res) => {
   let video = req.body.video;
   let userId = req.body.userId;
   let url = `https://www.googleapis.com/youtube/v3/videos?id=${video.id.videoId}&part=contentDetails&key=${api}`;
   axios.get(url)
   .then((data) => {
+    console.log(data.data.items[0].contentDetails.duration)
     let duration = moment.duration(data.data.items[0].contentDetails.duration, moment.ISO_8601).asSeconds();
+    console.log(duration)
     setVideo(video, userId, duration, () => {
-      res.status(201).send('Saved to db');
+      res.send('Saved to db');
     })
   })
 })
 
-app.post('/owner/delete', (req, res) => {
-  let userId = req.body.userId;
-  let videoId = req.body.video.videoId;
-  deleteVideo(userId, videoId, () => {
-    res.status(201).send('Removed from db');
+app.delete('/owner/video', (req, res) => {
+  let userId = JSON.parse(req.query.userId);
+  let videoId = JSON.parse(req.query.video);
+  deleteVideo(userId, videoId.videoId, () => {
+    res.send('Removed from db');
   })
 })
 
@@ -185,20 +240,21 @@ app.get('/owner/videoList', (req, res) => {
 })
 
 //---------------------------------------------------------OWNER COMMENTS
-app.post('/owner/saveComment', (req, res) => {
+app.post('/owner/comment', (req, res) => {
   setTeacherComment(req.body.comment, req.body.videoId, req.body.userId, req.body.start, req.body.end, (comment) => {
     res.send('Comment saved to DB');
   })
 })
 
-app.get('/owner/getComments', (req, res) => {
+app.get('/owner/comment', (req, res) => {
   getOwnerComments(req.query.videoId, (comments) => {
     res.send(comments);
   })
 })
 
-app.post('/owner/deleteComment', (req, res) => {
-  deleteOwnerComment(req.body.comment.id, (comment) => {
+app.delete('/owner/comment', (req, res) => {
+  let query = JSON.parse(req.query.comment)
+  deleteOwnerComment(query.id, (comment) => {
     res.send('Comment deleted from DB')
   })
 })
@@ -242,7 +298,7 @@ app.delete('/timestamps', (req, res) => {
 
 //---------------------------------------------------------TEACHER UPLOADS
 
-app.post('/teacherUploads', (req, res) => {
+app.post('/teacherUpload', (req, res) => {
   setUploads(req.body, (err, results) => {
     (err) ?
     console.error('ERROR IN SERVER POST UPLOADS: ', err) :
@@ -250,13 +306,21 @@ app.post('/teacherUploads', (req, res) => {
   })
 })
 
-app.get('/teacherUploads', (req, res) => {
+app.get('/teacherUpload', (req, res) => {
   // console.log('in get teacher uploads', req.query)
   getUploads(req.query, (err, results) => {
     (err) ?
     console.error('ERROR IN SERVER GET UPLOADS: ', err) :
     res.status(200).send(results);
   })
+})
+
+app.delete('/teacherUpload', (req, res) => {
+  deleteUpload(req.body.url, (err, results) => {
+    (err) ?
+    console.error('ERROR IN SERVER DELETE UPLOAD: ', err) :
+    res.send('Successfully removed upload from DB', results);
+  });
 })
 
 
@@ -311,3 +375,25 @@ app.post('/chatInfo', (req, res) => { //change to get request
     res.status(201).send(results);
   });
 })
+
+//---------------------------------------------------------OWNER BUILD SERIES
+
+// BUILD SERIES
+app.post('/owner/build', (req, res) => {
+  console.log('req.body in saveSeries', req.body);
+  saveSeries(req.body).then(result => {
+    res.status(200).send(result);
+  }).catch(err => {
+    res.status(500).send(err);
+  })
+});
+
+// REMOVE VIDEO FROM SERIES
+app.delete('/owner/build', (req, res) => {
+  let video = JSON.parse(req.query.video);
+  removeFromSeries(video, (err, result) => {
+    err ?
+      res.status(500).send('error') :
+        res.status(200).send(result);
+  });
+});

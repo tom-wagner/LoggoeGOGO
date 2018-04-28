@@ -5,8 +5,10 @@ import $ from 'jquery';
 import {Redirect} from 'react-router-dom';
 
 import VideoPlayer from './student-video-view/VideoPlayer.jsx'
+import VideoUploads from './student-video-view/VideoUploads.jsx'
 import TimestampList from './student-video-view/TimestampList.jsx'
 import ChatRoom from './student-video-view/ChatRoom.jsx'
+import Comments from './student-video-view/Comments.jsx'
 import Paper from 'material-ui/Paper';
 
 class StudentVideo extends React.Component {
@@ -101,13 +103,22 @@ class StudentVideo extends React.Component {
         <h6>You are logged in as {this.props.location.username}</h6>
         <div>
           <div>
-            <Paper style={paperStyle1}>
+            <Paper style={paperStyle4}>
               <VideoPlayer
                 videoId={this.props.location.videoId}
                 startingTimestamp={this.state.startingTimestamp}
                 saveTimeStamp={this.saveTimeStamp}
               />
+              <br/>
+              <Comments
+                videoId={this.props.location.videoId}
+                saveTimeStamp={this.saveTimeStamp}
+                changeVideo={this.changeVideo}
+              />
             </Paper>
+          </div>
+          
+          <div>
           </div>
           <div>
             <Paper style={paperStyle2}>
@@ -118,12 +129,21 @@ class StudentVideo extends React.Component {
               />
             </Paper>
           </div>
+          
           <div>
             <Paper style={paperStyle2}>
               <TimestampList
                 timestamps={this.state.timestamps}
                 deleteTimestamp={this.deleteTimestamp}
                 changeVideo={this.changeVideo}
+                userId={this.props.location.userId}
+              />
+            </Paper>
+          </div>
+          <div>
+            <Paper style={paperStyle1}>
+              <VideoUploads 
+                videoId={this.props.location.videoId}
               />
             </Paper>
           </div>
@@ -135,8 +155,8 @@ class StudentVideo extends React.Component {
 
 
 const style = {
-  height: '100%',
-  width: '100%',
+  height: 'auto',
+  width: '95%',
   margin: '30px',
   textAlign: 'center',
   display: 'inline-block',
@@ -158,5 +178,11 @@ const paperStyle2 = {
   float: 'left',
 }
 
+const paperStyle4 = {
+  margin: '20px', 
+  padding: '20px', 
+  width: 'auto', 
+  float: 'left',
+}
 
 export default StudentVideo;

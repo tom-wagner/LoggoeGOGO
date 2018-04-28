@@ -3,6 +3,7 @@ import SeriesListEntry from './SeriesListEntry.jsx';
 import Paper from 'material-ui/Paper';
 import { ItemTypes } from '../../constants.js';
 import { DropTarget } from 'react-dnd';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const videoSource = {
   // NEED TO UPDATE
@@ -19,19 +20,49 @@ function collect(connect, monitor) {
 }
 
 class SeriesList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      seriesDropDown: null,
+      seriesInput: '',
+    }
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(evt) {
+    this.setState({ seriesInput: evt.target.value });
+  }
 
   render() {
     // NEED TO UPDATE
-    const { videosInSeries, videos, redirect, removeFromSeries, connectDropTarget} = this.props;
+    const { userId, username, videosInSeries, videos, removeFromSeries, addToSeries, redirect, saveSeries, connectDropTarget} = this.props;
+    
+    // render input element if VideoSeriesList is not empty
+    const conditionalInput = videosInSeries.length === 0 ?
+      <div></div> :
+      <div>
+        Series Title: <input type="text" value={this.state.seriesInput} onChange={this.handleChange} />
+      </div>
+
+    // render save button if VideoSeriesList is not empty
+    const conditionalSaveBtn = videosInSeries.length === 0 ?
+      <div></div> :
+      <div>
+        <RaisedButton style={add10pxBottom} onClick={() => {saveSeries(videosInSeries, userId, username, this.state.seriesInput)}}>Save Series</RaisedButton>
+      </div>
+
     return connectDropTarget(
       <div style={container}>
         <Paper style={style}>
           <div>
-            {videosInSeries.length === 0 ? 'Search for a video and drag it here to save it' : `Videos in series: ${videosInSeries.length}` }
+            {videosInSeries.length === 0 ? 'Drag a videos here to build a series!' : <div style={add10pxBottom} >Videos in series: {videosInSeries.length}</div> }
+            {conditionalInput}<br/>
+            {conditionalSaveBtn}
             {videosInSeries.length === 0 ? null :
-              videosInSeries.map((video) => {
+              videosInSeries.map((video, idx) => {
                 return (
-                  <SeriesListEntry key={video.videoId} video={video} redirect={redirect} removeFromSeries={removeFromSeries}/>
+                  <SeriesListEntry key={video.videoId} idx={idx} video={video} redirect={redirect} removeFromSeries={removeFromSeries}/>
                 );
               })}
           </div>
@@ -52,9 +83,15 @@ const style = {
 }
 
 const container = {
-  height: '70vh',
+  height: '75vh',
   float: 'right',
   width: '40%',
+}
+
+const add10pxBottom = {
+  marginBottom: '10px',
+  padding: '5px',
+  height: 'auto'
 }
 
 export default DropTarget(ItemTypes.VIDEO, videoSource, collect)(SeriesList);

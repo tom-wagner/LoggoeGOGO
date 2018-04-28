@@ -1,10 +1,10 @@
-
+bundle.js
 node_modules/
 bower_components/
 package-lock.json
 *.log
 
 build/
-dist/
+react-client/dist/bundle.js
 
 config.js

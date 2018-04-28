@@ -112,4 +112,3 @@ INSERT INTO timeStamps (videoId, userId, timeStamp, comment, addressedByTeacher,
 
 -- insert a teacher comment on the video
 INSERT INTO teacherComments (video, userId, begRange, endRange, comment) VALUES (1, 2, 110, 132, "I'm sorry you're confused!");
-

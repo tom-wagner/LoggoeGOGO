@@ -15,14 +15,19 @@ class StudentHomepage extends React.Component {
         this.state = {
             query: '',
             videoList: [],
+            allVideosInDB: [],
             teachers: [],
-            selectedTeacher: null
+            selectedTeacher: null,
+            seriesList: [],
+            selectedSeries: 'All Videos',
         }
         this.sendToSelectedVideo = this.sendToSelectedVideo.bind(this);
         this.getTeachers = this.getTeachers.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+        this.handleTeacherChange = this.handleTeacherChange.bind(this);
+        this.handleSeriesChange = this.handleSeriesChange.bind(this);
         this.getVideosByTeacher = this.getVideosByTeacher.bind(this);
         this.getAllVideos = this.getAllVideos.bind(this);
+        this.filterBySeries = this.filterBySeries.bind(this);
     }
 
     componentDidMount() {
@@ -41,9 +46,20 @@ class StudentHomepage extends React.Component {
     getAllVideos() {
       axios.get('/student/homepage')
       .then(({data}) => {
+
+        // iterate through data and pull out all the series names
+        let seriesObj = {};
+        for (var video of data) {
+          if (!seriesObj[video.series]) { // && video.series !== null
+            seriesObj[video.series] = true;
+          }
+        }
+
         this.setState({
-          videoList: data
-        })
+          videoList: data,
+          allVideosInDB: data,
+          seriesList: Object.keys(seriesObj),
+        }, () => { console.log('state after DB response with all data: ', this.state) });
       })
       .catch((err) => {
         console.log(err);
@@ -54,20 +70,56 @@ class StudentHomepage extends React.Component {
       axios.get('/student/teachers')
       .then(({data}) => {
         this.setState({
-          teachers: data
-        })
+          teachers: data,
+        });
       })
       .catch((err) => {
         console.log(err);
       })
     }
 
-    handleChange(event, index, value) {
+    handleTeacherChange(event, index, value) {
       this.setState({
-        selectedTeacher: value
+        selectedTeacher: value,
+        selectedSeries: 'All Videos',
       }, () => {
         this.getVideosByTeacher();
       })
+    }
+
+    handleSeriesChange(event, index, value) {
+      this.setState({
+        selectedTeacher: null,
+        selectedSeries: value,
+      }, () => {
+
+        console.log('state!!', this.state);
+
+        if (this.state.selectedSeries === 'All Videos') {
+          this.setState({
+            selectedSeries: null,
+            videoList: this.state.allVideosInDB,
+          });
+        } else {
+          console.log('state after setting: ', this.state);
+          this.filterBySeries(value.series);
+        }
+
+      });
+
+      this.setState({
+        selectedSeries: value
+      }, () => {
+        if (this.state.selectedSeries === 'All Videos') {
+          // reset selectedSeries to null so remove -> delete function switching logic works
+          this.setState({
+            selectedSeries: null,
+            videos: this.state.allVideos,
+          });
+        } else {
+          this.filterBySeries(value);
+        }
+      });
     }
 
     getVideosByTeacher() {
@@ -79,15 +131,31 @@ class StudentHomepage extends React.Component {
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
+    }
+
+    filterBySeries(series) {
+      let filteredArr = [];
+      let allVideos = [...this.state.allVideosInDB];
+  
+      for (var item of allVideos) {
+        if (item.series === series) {
+          filteredArr.push(item);
+        }
+      }
+  
+      this.setState({
+        videoList: filteredArr,
+      });
     }
 
     render() {
+        console.log('SL: ', this.state.selectedSeries);
         return (
             <Paper style={style} zDepth={1}>
                     <h6>You are logged in as {this.props.location.username}</h6>
                 <div>
-                    <Paper 
+                    {/* <Paper 
                         style={searchStyle} 
                         zDepth={1}>  
                         <div> 
@@ -96,18 +164,42 @@ class StudentHomepage extends React.Component {
                             <RaisedButton 
                                 label="Search" />
                         </div>
-                    </Paper>
+                    </Paper> */}
                     <br/>
+
+                    {/* FILTER BY TEACHER */}
                     <Paper style={searchStyle} zDepth={1}>
-                    <DropDownMenu name="selectedTeacher" value={this.state.selectedTeacher} onChange={this.handleChange} style={{width: '200px'}}>
-                    <MenuItem value={100000} primaryText={"Select Teacher"}/>
-                    {this.state.teachers.length === 0 ? null : this.state.teachers.map((teacher) => {
-                      return(
-                        <MenuItem key={teacher.id} value={teacher.id} primaryText={teacher.firstName}/>
-                      )
-                    })}
-                    </DropDownMenu>
+                      <DropDownMenu name="selectedTeacher" value={this.state.selectedTeacher} onChange={this.handleTeacherChange} style={{width: '200px'}}>
+                        <MenuItem value={100000} primaryText={"Select Teacher"}/>
+                        {this.state.teachers.length === 0 ? null : this.state.teachers.map((teacher) => {
+                          return (
+                            <MenuItem key={teacher.id} value={teacher.id} primaryText={teacher.firstName}/>
+                          );
+                        })}
+                      </DropDownMenu>
                     </Paper>
+
+                    {/* FILTER BY SERIES */}
+                    <Paper style={searchStyle} zDepth={1}>
+                      <DropDownMenu name="selectedSeries" value={this.state.selectedSeries} onChange={this.handleSeriesChange} style={{width: '200px'}}>
+                        {this.state.seriesList.length === 0 ? null : this.state.seriesList.map((series, idx) => {
+
+                          // null is being coerced to 'null' at some point --> hence 'null' check
+                          if (series === 'null') { series = 'All Videos'; }
+
+                          // convert 'All Videos' to 'Select Series' for use within dropdown
+                          let altMenuItemText = undefined;
+                          if (series === 'All Videos') { altMenuItemText = 'Select Series'; }
+                          console.log('alt menu: ', altMenuItemText);
+
+                          return (
+                            <MenuItem key={idx} value={series} primaryText={altMenuItemText || series} />
+                          );
+                        })}
+                      </DropDownMenu>
+                    </Paper>
+
+
                     <Paper style={searchStyle}>
                       <RaisedButton onClick={() => {this.getAllVideos()}} label="Back to All Videos" labelStyle={{textTransform: 'none'}}/>
                     </Paper>
@@ -121,8 +213,8 @@ class StudentHomepage extends React.Component {
 }
 
 const style = {
-    height: '100%',
-    width: '100%',
+    height: 'auto',
+    width: 'auto',
     margin: '30px',
     textAlign: 'center',
     display: 'block',

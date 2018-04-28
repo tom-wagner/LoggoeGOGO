@@ -1,4 +1,6 @@
 import React from 'react';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import IconButton from 'material-ui/IconButton';
 
 
 const TeacherComments = (props) => (
@@ -6,14 +8,21 @@ const TeacherComments = (props) => (
     {props.comments.map((comment) => {
       return (
         <div>
-          <div>{comment.begRange} - {comment.endRange}</div>
+          <div style={timeStyle}>{comment.begRange} - {comment.endRange}</div>
           <div>{comment.comment}</div>
-          <button onClick={() => {props.deleteComment(comment)}}>X</button>
+          <IconButton onClick={() => {props.deleteComment(comment)}}>
+            <DeleteIcon/>
+          </IconButton>
         </div>
       )
     })}
   </div>
 )
+
+const timeStyle = {
+  float: 'left',
+  fontWeight: '800'
+}
 
 
 export default TeacherComments;

@@ -103,8 +103,6 @@ class OwnerHomepage extends React.Component {
   }
 
   removeFromSeries(video) {
-    console.log(video);
-
     let videos = this.state.videos;
     videos.push(video);
 
@@ -114,8 +112,16 @@ class OwnerHomepage extends React.Component {
     }));
   }
 
-  saveSeries(videoList) {
-
+  saveSeries(videoList, userId, username, series) {
+    // var seriesData = { videoList, userId, username };
+    axios.post('/owner/build', { videoList, userId, username, series })
+      .then((result) => {
+        console.log(result);
+        window.alert('Series saved! Navigate to home page to view the series.');
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render () {
@@ -125,7 +131,10 @@ class OwnerHomepage extends React.Component {
         <div id="owner-homepage-app">
           <header className="navbar"><h1>Hello {this.props.location.username}</h1></header>
           <div className="main">
-            Drag videos from the left column to the right column or click "Add to Series" to create a video series, then save the series by hitting the save button below
+            <p>Drag videos from the left column to the right column or click "Add to Series" to create a video series, then save the series by hitting the save button below</p>
+            <p><i>**Only videos not currently in a series can be added to a new series and as such only those videos are shown below</i></p>
+            
+            
             <div>
               <AllVideos
                 videos={this.state.videos}
@@ -136,10 +145,11 @@ class OwnerHomepage extends React.Component {
               <Hidden deleteVideo={this.deleteVideo}/>
               <SeriesList 
                 userId={this.state.userId}
+                username={this.props.location.username}
                 videos={this.state.videos}
                 redirect={this.sendToSelectedVideo}
-                deleteVideo={this.deleteVideo}
-                save={this.saveVideo}
+                /* deleteVideo={this.deleteVideo} */
+                /* save={this.saveVideo} */
                 addToSeries={this.addToSeries}
                 saveSeries={this.saveSeries}
                 videosInSeries={this.state.videosInSeries}
@@ -153,11 +163,11 @@ class OwnerHomepage extends React.Component {
 }
 
 const style = {
-  height: '100vh',
-  width: 'auto',
+  height: 'auto',
+  width: '95%',
   margin: '30px',
   textAlign: 'center',
-  display: 'block',
+  display: 'inline-block',
   padding: '30px',
   background: '#D8E4EA'
 }

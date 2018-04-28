@@ -29,17 +29,5 @@ Auth.getInfo = () => {
     })
 }
 
-// returns a promsie
-Auth.login = (username, password) => {
-    
-}
-
-Auth.register = (username, password) => {
-
-}
-
-Auth.logout = () => {
-
-}
 
 export default Auth

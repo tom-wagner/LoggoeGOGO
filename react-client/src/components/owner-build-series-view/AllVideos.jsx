@@ -10,10 +10,17 @@ const AllVideos = ({videos, videosInDB, redirect, save, addToSeries}) => {
       <Paper style={style}>
         <div>
           {/* NEED TO CHANGE PROPS BELOW AS NEEDED */}
-          {videosInDB >= 2 ?
-            videos.map(video => <AllVideosListEntry key={video.id} video={video} redirect={redirect} save={save} addToSeries={addToSeries}/>) :            
-            <div>Save/add at least two videos to your classroom, then come back to build a series!</div>
-          }
+          {videosInDB < 2 ? <div>Save/add at least two videos to your classroom, then come back to build a series!</div> :
+            videos.map(video => {
+
+              // only render videos that are not already in a series
+              if (video.series === null) {
+                return (
+                  <AllVideosListEntry key={video.id} video={video} redirect={redirect} save={save} addToSeries={addToSeries}/>
+                );
+              }
+              
+            })}
         </div>
       </Paper>
     </div>
@@ -28,12 +35,12 @@ const style = {
   display: 'block',
   padding: '30px 5px',
   "overflowY": 'auto'
-}
+};
 
 const container = {
-  height: '70vh',
+  height: '75vh',
   float: 'left',
   width: '40%'
-}
+};
 
 export default AllVideos;

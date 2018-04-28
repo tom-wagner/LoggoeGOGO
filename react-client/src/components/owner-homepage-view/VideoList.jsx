@@ -17,23 +17,33 @@ function collect(connect, monitor) {
   }
 }
 
-
 class VideoList extends React.Component {
 
   render() {
-    const { videos, redirect, deleteVideo, connectDropTarget} = this.props;
+    const { selectedSeries, videos, redirect, deleteVideo, removeFromSeries, connectDropTarget} = this.props;
+    console.log('Selected series:', selectedSeries);
+    
+    // conditionally toggle between removeFromSeries and deleteVideo depending on the videos being shown
+    if (selectedSeries === null || selectedSeries === 'All Videos') {
+      var conditionalFunction = deleteVideo;
+      var conditionalPurpose = 'Remove from Videos';
+    } else {
+      var conditionalFunction = removeFromSeries;
+      var conditionalPurpose = 'Remove from Series';
+    }
+
     return connectDropTarget(
       <div style={container}>
         <Paper style={style}>
+        {selectedSeries ? <h4>{`Series: ${selectedSeries}`}</h4> : null}
           <div>
-            {videos.length === 0 ? 'Search for a video and drag it here to save it' : videos.map((video, i) => <VideoListEntry key={i} video={video} redirect={redirect} deleteVideo={deleteVideo}/>)}
+            {videos.length === 0 ? 'Search for a video and drag it here to save it' : videos.map((video, i) => <VideoListEntry key={i} video={video} redirect={redirect} btnClickFunc={conditionalFunction} btnClickAction={conditionalPurpose}/>)}
           </div>
         </Paper>
       </div>
     )
   }
 }
-
 
 const style = {
   height: '100%',
@@ -46,7 +56,7 @@ const style = {
 }
 
 const container = {
-  height: '70vh',
+  height: '75vh',
   float: 'right',
   width: '40%',
 }

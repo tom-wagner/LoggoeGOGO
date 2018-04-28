@@ -155,7 +155,7 @@ class StudentHomepage extends React.Component {
             <Paper style={style} zDepth={1}>
                     <h6>You are logged in as {this.props.location.username}</h6>
                 <div>
-                    <Paper 
+                    {/* <Paper 
                         style={searchStyle} 
                         zDepth={1}>  
                         <div> 
@@ -164,7 +164,7 @@ class StudentHomepage extends React.Component {
                             <RaisedButton 
                                 label="Search" />
                         </div>
-                    </Paper>
+                    </Paper> */}
                     <br/>
 
                     {/* FILTER BY TEACHER */}

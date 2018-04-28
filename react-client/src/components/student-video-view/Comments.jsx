@@ -61,7 +61,7 @@ class Comments extends React.Component {
         {this.state.comments.length === 0 ? null : this.state.comments.map((comment) => {
           return(
           <div style={{clear: 'both'}}>
-            <div className="studentTime" style={timeStyle} onClick={()=>{this.getTimeStamp(comment.begRange)}}><a> {comment.begRange} - {comment.endRange}</a> </div>
+            <div className="studentTime" style={timeStyle} onClick={()=>{this.getTimeStamp(comment.begRange)}}> {comment.begRange} - {comment.endRange} </div>
             <div>{comment.comment}</div>
           </div>
           )

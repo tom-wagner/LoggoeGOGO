@@ -103,7 +103,7 @@ class StudentVideo extends React.Component {
         <h6>You are logged in as {this.props.location.username}</h6>
         <div>
           <div>
-            <Paper style={paperStyle1}>
+            <Paper style={paperStyle4}>
               <VideoPlayer
                 videoId={this.props.location.videoId}
                 startingTimestamp={this.state.startingTimestamp}
@@ -175,6 +175,13 @@ const paperStyle2 = {
   margin: '20px', 
   padding: '20px', 
   width: '30%', 
+  float: 'left',
+}
+
+const paperStyle4 = {
+  margin: '20px', 
+  padding: '20px', 
+  width: 'auto', 
   float: 'left',
 }
 

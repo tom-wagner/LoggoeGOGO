@@ -1,6 +1,8 @@
 # iVEP
 
-iVEP (Interactive Video Education Platform) allows students to view videos posted by owners and record specific timestamps with comments to mark down areas of "confusion." The owners will be able to watch snippets of the video marked by students and see the comments associated with those snippets. A histogram with buckets grouping the number of student confusions will indicate which period in the video confusion generally occurs. 
+iVEP (Interactive Video Education Platform) allows students to view videos posted by their teachers and comment on the videos if they are confused. Each student comment has a specific timestamps, which are aggregated and graphically displayed for the teachers in the form of a D3 graph. The teachers are then able to determine which aspects of the video are unclear and clarify what the point they were trying to get across or recommend additional resources related to the given topic. 
+
+Other features include a live chat room specific to each video, file upload specific to each video so the teacher can share additional resources, drag and drop allowing teachers to save videos by dragging them from one component to another and a playlist/series-builder allowing teachers to organize a series of videos to be watched in a sequence.
 
 ## Team
 

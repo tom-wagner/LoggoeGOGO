@@ -16,10 +16,10 @@ const SearchList = ({videos, redirect, save, videosInSeries, selectedSeries}) =>
           </div>
         </Paper>
       </div>
-    )
+    );
+
   } else {
     var totalDuration = 0;
-
 
     for (var item of videosInSeries) {
       totalDuration += item.duration;
@@ -41,7 +41,6 @@ const SearchList = ({videos, redirect, save, videosInSeries, selectedSeries}) =>
       </div>
     );
   }
-
 }
 
 const style = {
@@ -73,6 +72,6 @@ const container = {
 const convertTime = time => {
   let output = time >= 3600 ? moment.utc(time*1000).format('HH:mm:ss') : moment.utc(time*1000).format('mm:ss');
   return output;
-}
+};
 
 export default SearchList;

@@ -7,9 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const videoSource = {
   beginDrag(props) {
-    console.log('begin dragging', props)
-    const item = {item: props.video}
-    console.log(item)
+    const item = { item: props.video };
     return item;
   }
 };
@@ -45,7 +43,7 @@ class SeriesListEntry extends React.Component {
           </div>
         </Paper>
       </div>
-    )
+    );
   }
 }
 

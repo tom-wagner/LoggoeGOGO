@@ -26,17 +26,17 @@ const style = {
   margin: '30px',
   textAlign: 'center',
   display: 'block',
-  padding: '30px 5px'
-}
+  padding: '30px 5px',
+};
 
 const style1 = {
   width: '30%', 
-  float: 'left'
-}
+  float: 'left',
+};
 
 const style2 = {
   width: '50%', 
-  float: 'right'
-}
+  float: 'right',
+};
 
 export default VideoListEntry;

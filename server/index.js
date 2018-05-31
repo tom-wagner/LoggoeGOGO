@@ -41,7 +41,7 @@ const app = express();
 //---------------------------------------------------------SESSIONS
 app.use(session({
   secret: 'keyboard cat'
-}))
+}));
 
 //---------------------------------------------------------MIDDLEWARE
 
@@ -53,14 +53,11 @@ app.use(bodyParser.json());
 
 app.get('/vis-data', (req, res) => {
   const VIDEO_ID = req.query.videoId;
-  console.log('got vis data request', VIDEO_ID);
   getTimestamps(VIDEO_ID, (comments) => {
-    console.log('VIDEO COMMENTS', comments.map(d => d.timeStamp).join(','));
     var child = childProcess.spawn('python',
       ['server/dpgmm/dpgmm_script.py', comments.map(d => d.timeStamp).join(',')]);
     child.stdout.on('data', (data) => {
       data = data.toString();
-      console.log('TERMINATED', data);
       if (data[0] !== '[') {
         res.status(400).send('NOT ENOUGH DATA');
       } else {
@@ -131,29 +128,26 @@ app.post('/register', (req, res) => {
             req.session.isOwner = response[0].owner;
             req.session.userId = response[0].id;
             res.status(201).send(false)
-          })
-          }
-          );
-        }
-      )      
+          });
+        });
+      });      
     }
-
-  })
-})
+  });
+});
 
 //---------------------------------------------------------USER REGISTRATION
 
 app.post('/logout', (req, res) => {
   req.session.destroy();
   res.status(200).send('yay');
-})
+});
 
 //---------------------------------------------------------USER ID
 //get userId for owner homepage and homepage
 app.get('/user/id', (req, res) => {
-  getUserId(req.query.user, (userId) => 
-    res.send(userId)
-  )
+  getUserId(req.query.user, (userId) => {
+    res.send(userId);
+  });
 })
 
 //---------------------------------------------------------USER LOGIN STATUS
@@ -176,28 +170,24 @@ app.get('/user/loginstatus', (req, res) => {
     isOwner: req.session.isOwner,
     userId: req.session.userId
   });
-})
+});
 
 //---------------------------------------------------------STUDENT USER REQUESTS
 //get all videos for student homepage
-app.get('/student/homepage', (req, res) => 
-  getAllVideos((videos) => 
-    res.send(videos)
-  )
-)
+app.get('/student/homepage', (req, res) => getAllVideos((videos) => res.send(videos)));
 
 app.get('/student/teachers', (req, res) => {
   getTeachers((teachers) => {
     res.send(teachers);
   })
-})
+});
 
 app.get('/student/videos', (req, res) => {
   let teacher = req.query.teacher;
   getOwnerVideos(teacher, (data) => {
     res.send(data);
-  })
-})
+  });
+});
 
 //---------------------------------------------------------OWNER USER REQUESTS
 
@@ -206,58 +196,57 @@ app.get('/owner/searchYoutube', (req, res) => {
     (videos) => {
       res.status(200).send(videos);
     }
-  )
-})
+  );
+});
 
 app.post('/owner/video', (req, res) => {
   let video = req.body.video;
   let userId = req.body.userId;
   let url = `https://www.googleapis.com/youtube/v3/videos?id=${video.id.videoId}&part=contentDetails&key=${api}`;
-  axios.get(url)
-  .then((data) => {
-    console.log(data.data.items[0].contentDetails.duration)
-    let duration = moment.duration(data.data.items[0].contentDetails.duration, moment.ISO_8601).asSeconds();
-    console.log(duration)
-    setVideo(video, userId, duration, () => {
-      res.send('Saved to db');
-    })
-  })
-})
+  axios
+    .get(url)
+    .then((data) => {
+      let duration = moment.duration(data.data.items[0].contentDetails.duration, moment.ISO_8601).asSeconds();
+      setVideo(video, userId, duration, () => {
+        res.send('Saved to db');
+      });
+    });
+});
 
 app.delete('/owner/video', (req, res) => {
   let userId = JSON.parse(req.query.userId);
   let videoId = JSON.parse(req.query.video);
   deleteVideo(userId, videoId.videoId, () => {
     res.send('Removed from db');
-  })
-})
+  });
+});
 
 //get all videos for owner.
 app.get('/owner/videoList', (req, res) => {
   getOwnerVideos(req.query.userId, (videos) => {
     res.send(videos);
-  })
-})
+  });
+});
 
 //---------------------------------------------------------OWNER COMMENTS
 app.post('/owner/comment', (req, res) => {
   setTeacherComment(req.body.comment, req.body.videoId, req.body.userId, req.body.start, req.body.end, (comment) => {
     res.send('Comment saved to DB');
-  })
-})
+  });
+});
 
 app.get('/owner/comment', (req, res) => {
   getOwnerComments(req.query.videoId, (comments) => {
     res.send(comments);
-  })
-})
+  });
+});
 
 app.delete('/owner/comment', (req, res) => {
   let query = JSON.parse(req.query.comment)
   deleteOwnerComment(query.id, (comment) => {
-    res.send('Comment deleted from DB')
+    res.send('Comment deleted from DB');
   })
-})
+});
 
 //---------------------------------------------------------ANALYTICS
 
@@ -268,8 +257,8 @@ app.get('/buckets', (req,res) => {
       return Number(a.TimeStampGroup.match(/\d+/)) - Number(b.TimeStampGroup.match(/\d+/));
     });
     res.json(data)
-  })
-})
+  });
+});
 
 //---------------------------------------------------------WORKING WITH STUDENT COMMENTS
 
@@ -278,23 +267,23 @@ app.get('/timestamps', (req, res) => {
   getTimestamp(videoId, req.query.userId, (data) => {
     res.json(data);
   });  
-})
+});
 
 
 app.get('/timestamps/owner', (req, res) => {
   let videoId = req.query.videoId
   getOwnerTimestamp(videoId, (data) => {res.send(data)});  
-})
+});
 
 app.post('/timestamps', (req, res) => {
   let params = req.body.params;
   setTimestamp(params, (success) => {res.status(201).send()});
-})
+});
 
 app.delete('/timestamps', (req, res) => {
   let params = req.query;
   deleteTimestamp(params, (success) => {res.send()})
-})
+});
 
 //---------------------------------------------------------TEACHER UPLOADS
 
@@ -303,8 +292,8 @@ app.post('/teacherUpload', (req, res) => {
     (err) ?
     console.error('ERROR IN SERVER POST UPLOADS: ', err) :
     res.status(201).send(results);
-  })
-})
+  });
+});
 
 app.get('/teacherUpload', (req, res) => {
   // console.log('in get teacher uploads', req.query)
@@ -312,8 +301,8 @@ app.get('/teacherUpload', (req, res) => {
     (err) ?
     console.error('ERROR IN SERVER GET UPLOADS: ', err) :
     res.status(200).send(results);
-  })
-})
+  });
+});
 
 app.delete('/teacherUpload', (req, res) => {
   deleteUpload(req.body.url, (err, results) => {
@@ -321,8 +310,7 @@ app.delete('/teacherUpload', (req, res) => {
     console.error('ERROR IN SERVER DELETE UPLOAD: ', err) :
     res.send('Successfully removed upload from DB', results);
   });
-})
-
+});
 
 //---------------------------------------------------------DEFAULT ROUTE
 app.get('/*/bundle.js', (req, res) => {
@@ -345,16 +333,14 @@ let connections = [];
 
 io.on('connection', (socket) => {
   connections.push(socket);
-  console.log('Connected: %s sockets connected.', connections.length)
 
   socket.on('disconnect', (data) => {
     connections.splice(connections.indexOf(socket), 1);
-    console.log('Disconnected: %s sockets connected.', connections.length)
-  }) 
+  });
 
   socket.on('send message', (data) => {
     io.sockets.emit('new message', {msg: JSON.stringify(data)})
-  })
+  });
 });
 
 //adds chat messages to the chats db
@@ -380,20 +366,19 @@ app.post('/chatInfo', (req, res) => { //change to get request
 
 // BUILD SERIES
 app.post('/owner/build', (req, res) => {
-  console.log('req.body in saveSeries', req.body);
-  saveSeries(req.body).then(result => {
-    res.status(200).send(result);
-  }).catch(err => {
-    res.status(500).send(err);
-  })
+  saveSeries(req.body)
+    .then(result => {
+      res.status(200).send(result);
+    })
+    .catch(err => {
+      res.status(500).send(err);
+    });
 });
 
 // REMOVE VIDEO FROM SERIES
 app.delete('/owner/build', (req, res) => {
   let video = JSON.parse(req.query.video);
   removeFromSeries(video, (err, result) => {
-    err ?
-      res.status(500).send('error') :
-        res.status(200).send(result);
+    err ? res.status(500).send('error') : res.status(200).send(result);
   });
 });

@@ -26,7 +26,7 @@ class Registration extends React.Component {
   }
 
   handleUpdateInput(input) {
-    this.setState({inputUsername: input})
+    this.setState({inputUsername: input});
   }
 
   sendToUserHomepage(user) {
@@ -34,7 +34,7 @@ class Registration extends React.Component {
     this.props.history.push({
       pathname: path,
       username: user.username,
-    })
+    });
   }
 
   switchRegistration(isOwner) {
@@ -44,50 +44,49 @@ class Registration extends React.Component {
   }
 
   handleRegistration() {
-      const user = {
-        username: this.state.inputUsername,
-        isOwner: this.state.isOwner,
-      }
+    const user = {
+      username: this.state.inputUsername,
+      isOwner: this.state.isOwner,
+    };
 
-      axios.post('/register', user)
-        .then(response => {
-          const isExist = response.data;
+    axios.post('/register', user)
+      .then(response => {
+        const isExist = response.data;
 
-          if (isExist) {
-            this.refs['autocomplete'].setState({searchText:''});
-            window.alert('Username already exists');
-          } 
-          else {
-            this.sendToUserHomepage(user)
-          }
+        if (isExist) {
+          this.refs['autocomplete'].setState({ searchText: '' });
+          window.alert('Username already exists');
+        }
+        else {
+          this.sendToUserHomepage(user)
+        }
 
-        })
-        .catch((err) => console.log('error in client side', err))
+      })
+      .catch((err) => console.log('error in client side', err))
   }
 
   render () {
     return (
       <Paper style={paperStyle}>
-
           <AutoComplete 
             style={inputStyle} 
             dataSource={[]}
             ref={'autocomplete'}
             hintText="New Username"
             onUpdateInput={this.handleUpdateInput}
-            onNewRequest={this.handleRegistration}/>
-
+            onNewRequest={this.handleRegistration}
+          />
           <FlatButton
             style={buttonStyle}
             label={`Register as ${this.state.registrationType}`} 
-            onClick={this.handleRegistration}/>
-
+            onClick={this.handleRegistration}
+          />
           <Toggle 
             style={toggleStyle} 
-            onToggle={(_, isOwner) => {this.switchRegistration(isOwner)}}/>
-
+            onToggle={(_, isOwner) => {this.switchRegistration(isOwner)}}
+          />
       </Paper>
-    )
+    );
   }
 }
 
@@ -98,7 +97,7 @@ const paperStyle = {
   position: 'absolute',
   top: '50%',
   left: '50%',
-  transform: 'translate(-50%, -50%)'      
+  transform: 'translate(-50%, -50%)',
 };
 
 const buttonStyle = {
@@ -114,15 +113,13 @@ const inputStyle = {
   display: 'inline-block',
   position: 'relative',
   left: '50%',
-  transform: 'translate(-28%, 0%)'
-
+  transform: 'translate(-28%, 0%)',
 };
 
 const toggleStyle = {
   position:'relative', 
   left:'50%', 
-  transform: 'translate(-6%, 0%)'
-}
-
+  transform: 'translate(-6%, 0%)',
+};
 
 export default withRouter(Registration);

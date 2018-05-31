@@ -25,12 +25,13 @@ class App extends React.Component {
     super(props);
     this.state = {
       userInfoLoaded: false
-    }
+    };
     this.handleLogout = this.handleLogout.bind(this);
   }
 
   componentDidMount() {
-    Auth.getInfo()
+    Auth
+      .getInfo()
       .then(res => {
         this.setState({
           userInfoLoaded: true
@@ -39,9 +40,10 @@ class App extends React.Component {
   }
 
   handleLogout() {
-      axios.post('/logout')
+    axios
+      .post('/logout')
       .then(res => {
-        this.setState({isLoggedIn: false}, () => {
+        this.setState({ isLoggedIn: false }, () => {
           window.location.reload()
         });
       })

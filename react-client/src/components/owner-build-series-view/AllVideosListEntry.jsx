@@ -6,9 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const searchSource = {
   beginDrag(props) {
-    console.log('begin dragging: ', props)
-    const item = {item: props.video}
-    console.log('item: ', item)
+    const item = {item: props.video};
     return item;
   }
 };
@@ -17,7 +15,7 @@ function collect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
-  }
+  };
 }
 
 class AllVideosListEntry extends React.Component {
@@ -55,6 +53,6 @@ const style = {
   padding: '30px 5px',
   wordWrap: 'break-word',
   cursor: 'move',
-}
+};
 
 export default DragSource(ItemTypes.VIDEO, searchSource, collect)(AllVideosListEntry);

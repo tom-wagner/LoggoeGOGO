@@ -6,7 +6,6 @@ import { DropTarget } from 'react-dnd';
 import RaisedButton from 'material-ui/RaisedButton';
 
 const videoSource = {
-  // NEED TO UPDATE
   drop(props, monitor) {
     let item = monitor.getItem();
     props.addToSeries(item.item);
@@ -16,7 +15,7 @@ const videoSource = {
 function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
-  }
+  };
 }
 
 class SeriesList extends React.Component {
@@ -25,7 +24,7 @@ class SeriesList extends React.Component {
     this.state = {
       seriesDropDown: null,
       seriesInput: '',
-    }
+    };
 
     this.handleChange = this.handleChange.bind(this);
   }
@@ -35,7 +34,6 @@ class SeriesList extends React.Component {
   }
 
   render() {
-    // NEED TO UPDATE
     const { userId, username, videosInSeries, videos, removeFromSeries, addToSeries, redirect, saveSeries, connectDropTarget} = this.props;
     
     // render input element if VideoSeriesList is not empty
@@ -68,7 +66,7 @@ class SeriesList extends React.Component {
           </div>
         </Paper>
       </div>
-    )
+    );
   }
 }
 

@@ -32,6 +32,6 @@ const NavBar = ({path, handleLogout, isLoggedIn, studentRedirect, ownerRedirect,
       }
     />
   </div>
-)
+);
 
 export default NavBar;

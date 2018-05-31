@@ -19,11 +19,10 @@ function collect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()
-  }
+  };
 }
 
 class VideoListEntry extends React.Component {
-
   render() {
     const { video, redirect, btnClickFunc, btnClickAction, connectDragSource } = this.props;
     return connectDragSource(
@@ -49,7 +48,7 @@ class VideoListEntry extends React.Component {
           </div>
         </Paper>
       </div>
-    )
+    );
   }
 }
 
@@ -61,7 +60,7 @@ const style = {
   display: 'block',
   padding: '30px 5px',
   cursor: 'move',
-  wordWrap: 'break-word'
-}
+  wordWrap: 'break-word',
+};
 
 export default DragSource(ItemTypes.SAVED, videoSource, collect)(VideoListEntry);

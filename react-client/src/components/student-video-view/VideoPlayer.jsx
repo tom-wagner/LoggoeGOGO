@@ -50,7 +50,7 @@ class VideoPlayer extends React.Component {
   clearInput(){
     this.setState({
       comment: ''
-    })
+    });
   }
 
   render() {
@@ -60,10 +60,11 @@ class VideoPlayer extends React.Component {
       playerVars: {
         autoplay: 1,
         start: this.props.startingTimestamp,
-      }
+      },
     }
 
-    return <div style={{ display: "block", margin: "20px" }}>
+    return (
+      <div style={{ display: "block", margin: "20px" }}>
         <div>
           <YouTube videoId={this.state.videoId} opts={opts} onReady={this.onReady} />
         </div>
@@ -86,9 +87,9 @@ class VideoPlayer extends React.Component {
               }} label="Confused" style={{ margin: "5px" }} />
           </label>
         </div>
-      </div>;
+      </div>
+    );
   }
-
 }
 
 export default VideoPlayer;

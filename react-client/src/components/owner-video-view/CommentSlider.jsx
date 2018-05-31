@@ -8,8 +8,8 @@ class CommentSlider extends React.Component {
     super(props);
     this.state = {
       start: '00:00',
-      end: '00.00'
-    }
+      end: '00.00',
+    };
     this.onSliderChange = this.onSliderChange.bind(this);
     this.convertTime = this.convertTime.bind(this);
     this.getTimeStamp = this.getTimeStamp.bind(this);
@@ -18,8 +18,8 @@ class CommentSlider extends React.Component {
   onSliderChange = (value) => {
     this.setState({
       start: this.convertTime(value[0]),
-      end: this.convertTime(value[1])
-    })
+      end: this.convertTime(value[1]),
+    });
   }
 
   convertTime(time) {
@@ -28,7 +28,6 @@ class CommentSlider extends React.Component {
   }
 
   getTimeStamp(start) {
-    console.log(start)
     var time;
     if (start.length === 5) {
       time = moment(start, 'mm:ss').diff(moment().startOf('day'), 'seconds');
@@ -52,16 +51,12 @@ class CommentSlider extends React.Component {
           <TeacherForm save={this.props.save} video={this.props.video} start={this.state.start} end={this.state.end}/>
         </div>
       </div>
-    )
+    );
   }
 }
 
 const style = {
   padding: '10px',
-}
-
+};
 
 export default CommentSlider;
-
-
-//<Slider value={this.state.value} onChange={this.onSliderChange} style={{width: '400', margin: '50'}}>Hello</Slider>

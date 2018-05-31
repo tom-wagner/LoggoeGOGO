@@ -60,7 +60,6 @@ class TeacherUploads extends React.Component {
         ]
       })
       .then(response => {
-        console.log('testing')
         this.saveUploads(response.filesUploaded);
         this.getUploads();
       })
@@ -72,7 +71,7 @@ class TeacherUploads extends React.Component {
     data.forEach((upload) => {
       upload['videoId'] = this.props.videoId;
     });
-    console.log('this is save uploads', data)
+    
     axios
       .post("/teacherUpload", { data: data})
       .then(() => console.log("successfully saved file upload to db!"))
@@ -95,29 +94,9 @@ class TeacherUploads extends React.Component {
           .then(() => console.log("successfully deleted upload from db!"))
           .catch((err) => console.log("ERROR IN DELETING FILE FROM DB", err));
       }
-    })
+    });
     this.getUploads();
   }
 }
-
-
-
-// let temp = {
-//   filesUploaded: [
-//     {
-//       filename: "zoom_0.mp4",
-//       handle: "VVcCQkvRg2kSE2QpAhwk",
-//       mimetype: "video/mp4",
-//       originalFile: { name: "zoom_0.mp4", type: "video/mp4", size: 27819834 },
-//       originalPath: "zoom_0.mp4",
-//       size: 27819834,
-//       source: "local_file_system",
-//       status: "Stored",
-//       uploadId: "71c1154dffaec2859afe59c4f429038f4",
-//       url: "https://cdn.filestackcontent.com/VVcCQkvRg2kSE2QpAhwk",
-//       videoId: 'Ukg_U3CnJWI'
-//     }
-//   ]
-// };
 
 export default TeacherUploads;

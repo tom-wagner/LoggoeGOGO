@@ -2,12 +2,11 @@ import React from 'react';
 import Paper from 'material-ui/Paper';
 import { DragSource } from 'react-dnd';
 import { ItemTypes } from '../../constants.js';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const searchSource = {
   beginDrag(props) {
-    console.log('begin dragging: ', props)
-    const item = {item: props.video}
-    console.log('item: ', item)
+    const item = {item: props.video};
     return item;
   }
 };
@@ -16,7 +15,7 @@ function collect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
-  }
+  };
 }
 
 class AllVideosListEntry extends React.Component {
@@ -36,7 +35,7 @@ class AllVideosListEntry extends React.Component {
               <br/>
               <div style={{color: 'grey'}}> {video.description} </div>
               <br/>
-              <button onClick={() => { addToSeries(video) }}>Add to Series</button>
+              <RaisedButton style={{padding: '5px'}} onClick={() => { addToSeries(video) }}>Add to Series</RaisedButton>
             </div>
           </div>
         </Paper>
@@ -54,6 +53,6 @@ const style = {
   padding: '30px 5px',
   wordWrap: 'break-word',
   cursor: 'move',
-}
+};
 
 export default DragSource(ItemTypes.VIDEO, searchSource, collect)(AllVideosListEntry);

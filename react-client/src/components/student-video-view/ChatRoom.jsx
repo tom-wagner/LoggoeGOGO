@@ -9,7 +9,7 @@ class ChatRoom extends React.Component {
     super(props);
     this.state = {
       message: "",
-      messages: []
+      messages: [],
     };
     this.socket = null;
     this.postMessage = this.postMessage.bind(this);
@@ -26,28 +26,24 @@ class ChatRoom extends React.Component {
   connectSocket() {
     this.socket = window.io.connect("http://localhost:3000");
     this.socket.on("new message", data => {
-      this.setState(
-        {
+      this.setState({
           messages: [...this.state.messages, JSON.parse(data.msg)]
-        },
-        () => {
-          document.getElementById("message").value = "";
-        }
-      );
+      }, () => { document.getElementById("message").value = ""; });
     });
   }
 
   loadChats() {
-    axios.post('/chatInfo', {videoId: this.props.videoId})
-    .then((data) => {
-      let timeStamp = moment(data.data[0].timeStamp, "YYYY-MM-DD").format('lll')
-      this.setState({
-        messages: [...this.state.messages, ...data.data]
+    axios
+      .post('/chatInfo', { videoId: this.props.videoId })
+      .then((data) => {
+        let timeStamp = moment(data.data[0].timeStamp, "YYYY-MM-DD").format('lll')
+        this.setState({
+          messages: [...this.state.messages, ...data.data]
+        });
       })
-    })
-    .catch((err) => {
-      console.log('ERROR IN CHATROOM.JSX POSTMESSAGE: ', err);
-    })
+      .catch((err) => {
+        console.log('ERROR IN CHATROOM.JSX POSTMESSAGE: ', err);
+      });
   }
 
   postMessage() {
@@ -57,25 +53,24 @@ class ChatRoom extends React.Component {
       videoId: this.props.videoId
     });
     // send post req with message, user, videoId, timestamp to server
-    axios.post("/chats", {
-      userId: this.props.userId,
-      username: this.props.username,
-      timeStamp: moment().format("YYYY/MM/DD HH:mm:ss"),
-      videoId: this.props.videoId, 
-      text: this.state.message
-    })
-    .then(() => {
-      console.log('posted message from chatroom.jsx to server')
-    })
-    .catch((err) => {
-      console.log('ERROR IN CHATROOM.JSX POSTMESSAGE: ', err);
-    })
+    axios
+      .post("/chats", {
+        userId: this.props.userId,
+        username: this.props.username,
+        timeStamp: moment().format("YYYY/MM/DD HH:mm:ss"),
+        videoId: this.props.videoId, 
+        text: this.state.message
+      })
+      .then(() => {
+        console.log('posted message from chatroom.jsx to server')
+      })
+      .catch((err) => {
+        console.log('ERROR IN CHATROOM.JSX POSTMESSAGE: ', err);
+      })
   }
 
   changeHandler(e) {
-    this.setState({
-      message: e.target.value
-    });
+    this.setState({ message: e.target.value });
   }
 
   render() {

@@ -3,23 +3,18 @@ import Paper from 'material-ui/Paper';
 import AllVideosListEntry from './AllVideosListEntry.jsx';
 
 const AllVideos = ({videos, videosInDB, redirect, save, addToSeries}) => {
-  console.log('videos: ', videos);
-  console.log(videosInDB);
   return (
     <div style={container}>
       <Paper style={style}>
         <div>
-          {/* NEED TO CHANGE PROPS BELOW AS NEEDED */}
           {videosInDB < 2 ? <div>Save/add at least two videos to your classroom, then come back to build a series!</div> :
             videos.map(video => {
-
               // only render videos that are not already in a series
               if (video.series === null) {
                 return (
                   <AllVideosListEntry key={video.id} video={video} redirect={redirect} save={save} addToSeries={addToSeries}/>
                 );
               }
-              
             })}
         </div>
       </Paper>

@@ -8,7 +8,7 @@ class Search extends React.Component {
     super(props)
     this.state = {
       userInput: ''
-    }
+    };
     this.updateInput = this.updateInput.bind(this);
     this.onNewRequest = this.onNewRequest.bind(this);
   }
@@ -46,7 +46,7 @@ class Search extends React.Component {
 
         </div>
       </Paper>
-    )
+    );
   }
 }
 
@@ -56,12 +56,11 @@ const style = {
   margin: '20px',
   textAlign: 'center',
   display: 'inline-block',
-  padding: '10px'
-}
+  padding: '10px',
+};
 
 const button = {
   height: '10px',
-
-}
+};
 
 export default Search

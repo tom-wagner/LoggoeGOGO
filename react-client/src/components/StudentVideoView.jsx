@@ -17,7 +17,7 @@ class StudentVideo extends React.Component {
     this.state = {
       timestamps: [],
       startingTimestamp: 0,
-      userId: ""
+      userId: "",
     };
 
     this.getAllTimestamps = this.getAllTimestamps.bind(this);
@@ -103,7 +103,7 @@ class StudentVideo extends React.Component {
         <h6>You are logged in as {this.props.location.username}</h6>
         <div>
           <div>
-            <Paper style={paperStyle1}>
+            <Paper style={paperStyle4}>
               <VideoPlayer
                 videoId={this.props.location.videoId}
                 startingTimestamp={this.state.startingTimestamp}
@@ -155,27 +155,34 @@ class StudentVideo extends React.Component {
 
 
 const style = {
-  height: '100%',
-  width: '100%',
+  height: 'auto',
+  width: '95%',
   margin: '30px',
   textAlign: 'center',
   display: 'inline-block',
   padding: '30px',
   background: '#D8E4EA',
-}
+};
 
 const paperStyle1 = {
   margin: '20px', 
   padding: '20px', 
   width: '60%', 
   float: 'left',
-}
+};
 
 const paperStyle2 = {
   margin: '20px', 
   padding: '20px', 
   width: '30%', 
   float: 'left',
-}
+};
+
+const paperStyle4 = {
+  margin: '20px', 
+  padding: '20px', 
+  width: 'auto', 
+  float: 'left',
+};
 
 export default StudentVideo;

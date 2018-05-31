@@ -3,9 +3,9 @@ import SeriesListEntry from './SeriesListEntry.jsx';
 import Paper from 'material-ui/Paper';
 import { ItemTypes } from '../../constants.js';
 import { DropTarget } from 'react-dnd';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const videoSource = {
-  // NEED TO UPDATE
   drop(props, monitor) {
     let item = monitor.getItem();
     props.addToSeries(item.item);
@@ -15,7 +15,7 @@ const videoSource = {
 function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
-  }
+  };
 }
 
 class SeriesList extends React.Component {
@@ -24,7 +24,7 @@ class SeriesList extends React.Component {
     this.state = {
       seriesDropDown: null,
       seriesInput: '',
-    }
+    };
 
     this.handleChange = this.handleChange.bind(this);
   }
@@ -34,7 +34,6 @@ class SeriesList extends React.Component {
   }
 
   render() {
-    // NEED TO UPDATE
     const { userId, username, videosInSeries, videos, removeFromSeries, addToSeries, redirect, saveSeries, connectDropTarget} = this.props;
     
     // render input element if VideoSeriesList is not empty
@@ -48,7 +47,7 @@ class SeriesList extends React.Component {
     const conditionalSaveBtn = videosInSeries.length === 0 ?
       <div></div> :
       <div>
-        <button style={add10pxBottom} onClick={() => {saveSeries(videosInSeries, userId, username, this.state.seriesInput)}}>Save Series</button>
+        <RaisedButton style={add10pxBottom} onClick={() => {saveSeries(videosInSeries, userId, username, this.state.seriesInput)}}>Save Series</RaisedButton>
       </div>
 
     return connectDropTarget(
@@ -67,7 +66,7 @@ class SeriesList extends React.Component {
           </div>
         </Paper>
       </div>
-    )
+    );
   }
 }
 
@@ -88,7 +87,9 @@ const container = {
 }
 
 const add10pxBottom = {
-  marginBottom: '10px'
+  marginBottom: '10px',
+  padding: '5px',
+  height: 'auto'
 }
 
 export default DropTarget(ItemTypes.VIDEO, videoSource, collect)(SeriesList);

@@ -2,12 +2,12 @@ import React from 'react';
 import Paper from 'material-ui/Paper';
 import { DragSource } from 'react-dnd';
 import { ItemTypes } from '../../constants.js';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const videoSource = {
   beginDrag(props) {
-    console.log('begin dragging', props)
-    const item = {item: props.video}
-    console.log(item)
+    const item = { item: props.video };
     return item;
   }
 };
@@ -35,12 +35,15 @@ class SeriesListEntry extends React.Component {
             <div style={{width: '50%', float: 'right'}}>
               <div style={boldAnd10pxBottom} onClick={()=>{redirect(video)}}> {video.title} </div>
               <div style={greyAnd10pxBottom}> {video.description} </div>
-              <button style={add10pxBottom} onClick={() => {removeFromSeries(video)}}>Remove from Series</button>
+              <RaisedButton style={add10pxBottom} onClick={() => {removeFromSeries(video)}}>
+              Remove from Series
+              <DeleteIcon></DeleteIcon>
+              </RaisedButton>
             </div>
           </div>
         </Paper>
       </div>
-    )
+    );
   }
 }
 
@@ -55,6 +58,8 @@ const style = {
 
 const add10pxBottom = {
   marginBottom: '10px',
+  padding: '5px',
+  height: 'auto'
 };
 
 const boldAnd10pxBottom = {

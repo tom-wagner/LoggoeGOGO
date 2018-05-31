@@ -12,7 +12,7 @@ const deleteSource = {
 function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
-  }
+  };
 }
 
 class Hidden extends React.Component {
@@ -21,14 +21,14 @@ class Hidden extends React.Component {
     const { connectDropTarget } = this.props;
     return connectDropTarget(
       <div style={hidden}></div>
-    )
+    );
   }
 }
 
 const hidden = {
   float: 'left',
   height: '80vh',
-  width: '18%'
-}
+  width: '18%',
+};
 
 export default DropTarget(ItemTypes.SAVED, deleteSource, collect)(Hidden);

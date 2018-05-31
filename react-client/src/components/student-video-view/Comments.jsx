@@ -7,8 +7,8 @@ class Comments extends React.Component {
     super(props);
     this.state = {
       comment: '',
-      comments: []
-    }
+      comments: [],
+    };
     this.getComments = this.getComments.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.onChangeVideo = this.onChangeVideo.bind(this);
@@ -24,19 +24,20 @@ class Comments extends React.Component {
   }
 
   getComments() {
-    axios.get('/owner/comment', {
-      params: {
-        videoId: this.props.videoId
-      }
-    })
-    .then(({data}) => {
-      this.setState({
-        comments: data
+    axios
+      .get('/owner/comment', {
+        params: {
+          videoId: this.props.videoId
+        }
       })
-    })
-    .catch((err) => {
-      console.log(err);
-    })
+      .then(({data}) => {
+        this.setState({
+          comments: data
+        })
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   }
 
   onChangeVideo(time) {
@@ -64,7 +65,7 @@ class Comments extends React.Component {
             <div className="studentTime" style={timeStyle} onClick={()=>{this.getTimeStamp(comment.begRange)}}> {comment.begRange} - {comment.endRange} </div>
             <div>{comment.comment}</div>
           </div>
-          )
+          );
         })}
       </div>
     )
@@ -75,6 +76,6 @@ const timeStyle = {
   float: 'left',
   fontWeight: '800',
   marginBottom: '10px',
-}
+};
 
 export default Comments;

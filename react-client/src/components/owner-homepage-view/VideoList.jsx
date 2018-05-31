@@ -21,7 +21,6 @@ class VideoList extends React.Component {
 
   render() {
     const { selectedSeries, videos, redirect, deleteVideo, removeFromSeries, connectDropTarget} = this.props;
-    console.log('Selected series:', selectedSeries);
     
     // conditionally toggle between removeFromSeries and deleteVideo depending on the videos being shown
     if (selectedSeries === null || selectedSeries === 'All Videos') {
@@ -42,7 +41,7 @@ class VideoList extends React.Component {
         </Paper>
       </div>
     )
-  }
+  };
 }
 
 const style = {
@@ -53,13 +52,12 @@ const style = {
   display: 'block',
   padding: '30px 5px',
   "overflowY": 'auto',
-}
+};
 
 const container = {
   height: '75vh',
   float: 'right',
   width: '40%',
-}
-
+};
 
 export default DropTarget(ItemTypes.VIDEO, videoSource, collect)(VideoList);

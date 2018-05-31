@@ -36,10 +36,9 @@ class VideoUploads extends React.Component {
       .get("/teacherUpload", { params: { videoId: this.props.videoId } })
       // .get("/teacherUploads", { params: { videoId: this.props.videoId, username: this.props.username } })
       .then((data) => {
-        console.log("successfully getting file uploads from db!", data.data);
         this.setState({
           uploads: [...data.data]
-        })
+        });
       })
       .catch(err => console.log("ERROR IN GETTING UPLOADS FROM DB", err));
   }

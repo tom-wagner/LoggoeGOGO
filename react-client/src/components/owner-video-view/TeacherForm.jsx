@@ -16,14 +16,14 @@ class TeacherForm extends React.Component {
   handleChange(comment) {
     this.setState({
       comment: comment
-    })
+    });
   }
 
   handleClick() {
     this.props.save(this.props.start, this.props.end, this.state.comment, () => {
       this.setState({
         comment: ''
-      })
+      });
     });
   }
 
@@ -41,13 +41,8 @@ class TeacherForm extends React.Component {
           onClick={this.handleClick}
           label="Add"/>
       </div>
-    )
+    );
   }
 }
 
-
 export default TeacherForm;
-
-
-/* 
-             Comment: <input name="comment" id="comment" value={this.state.comment} onChange={this.handleChange}></input> */

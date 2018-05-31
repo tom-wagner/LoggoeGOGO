@@ -2,7 +2,6 @@ import React from 'react';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import IconButton from 'material-ui/IconButton';
 
-
 const TeacherComments = (props) => (
   <div>
     {props.comments.map((comment) => {
@@ -14,15 +13,14 @@ const TeacherComments = (props) => (
             <DeleteIcon/>
           </IconButton>
         </div>
-      )
+      );
     })}
   </div>
 )
 
 const timeStyle = {
   float: 'left',
-  fontWeight: '800'
-}
-
+  fontWeight: '800',
+};
 
 export default TeacherComments;

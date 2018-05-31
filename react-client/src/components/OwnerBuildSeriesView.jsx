@@ -114,9 +114,9 @@ class OwnerHomepage extends React.Component {
 
   saveSeries(videoList, userId, username, series) {
     // var seriesData = { videoList, userId, username };
-    axios.post('/owner/build', { videoList, userId, username, series })
+    axios
+      .post('/owner/build', { videoList, userId, username, series })
       .then((result) => {
-        console.log(result);
         window.alert('Series saved! Navigate to home page to view the series.');
       })
       .catch(err => {
@@ -125,7 +125,6 @@ class OwnerHomepage extends React.Component {
   }
 
   render () {
-    console.log('this.state in build: ', this.state);
     return (
       <Paper style={style} zDepth={1}>
         <div id="owner-homepage-app">
@@ -148,8 +147,6 @@ class OwnerHomepage extends React.Component {
                 username={this.props.location.username}
                 videos={this.state.videos}
                 redirect={this.sendToSelectedVideo}
-                /* deleteVideo={this.deleteVideo} */
-                /* save={this.saveVideo} */
                 addToSeries={this.addToSeries}
                 saveSeries={this.saveSeries}
                 videosInSeries={this.state.videosInSeries}
@@ -158,7 +155,7 @@ class OwnerHomepage extends React.Component {
           </div>  
         </div>
       </Paper>
-    )
+    );
   }
 }
 
@@ -169,13 +166,13 @@ const style = {
   textAlign: 'center',
   display: 'inline-block',
   padding: '30px',
-  background: '#D8E4EA'
-}
+  background: '#D8E4EA',
+};
 
 const hidden = {
   height: '70vh',
   float: 'left',
-  width: '40%'
-}
+  width: '40%',
+};
 
 export default withRouter(OwnerHomepage);

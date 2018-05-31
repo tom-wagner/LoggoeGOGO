@@ -17,7 +17,7 @@ class StudentVideo extends React.Component {
     this.state = {
       timestamps: [],
       startingTimestamp: 0,
-      userId: ""
+      userId: "",
     };
 
     this.getAllTimestamps = this.getAllTimestamps.bind(this);
@@ -162,27 +162,27 @@ const style = {
   display: 'inline-block',
   padding: '30px',
   background: '#D8E4EA',
-}
+};
 
 const paperStyle1 = {
   margin: '20px', 
   padding: '20px', 
   width: '60%', 
   float: 'left',
-}
+};
 
 const paperStyle2 = {
   margin: '20px', 
   padding: '20px', 
   width: '30%', 
   float: 'left',
-}
+};
 
 const paperStyle4 = {
   margin: '20px', 
   padding: '20px', 
   width: 'auto', 
   float: 'left',
-}
+};
 
 export default StudentVideo;

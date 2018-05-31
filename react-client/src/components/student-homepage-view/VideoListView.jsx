@@ -1,5 +1,4 @@
 import React from 'react';
-
 import VideoListEntry from './VideoListEntryView.jsx';
 import Paper from 'material-ui/Paper';
 
@@ -10,13 +9,12 @@ const VideoList = ({videos, redirect}) => {
     margin: '30px',
     textAlign: 'center',
     display: 'block',
-    padding: '30px 5px'
-  }
+    padding: '30px 5px',
+  };
 
   return (
     <Paper style={style}>
     <div>
-    {console.log('videos in VideoList student: ', videos)}
       {videos.length === 0 ? 'This teacher has not yet uploaded any videos.' : videos.map((video, i) => <VideoListEntry key={i} video={video} redirect={redirect}/>)}
     </div>
     </Paper>

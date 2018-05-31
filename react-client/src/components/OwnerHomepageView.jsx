@@ -40,10 +40,11 @@ class OwnerHomepage extends React.Component {
   }
   
   getUserId(user) {
-    axios.get('/user/id', {params: {user: user}})
-         .then((data) => {
-           this.setState({userId: data.data[0].id}, ()=> this.showVideoList());
-         })
+    axios
+      .get('/user/id', { params: { user: user }})
+      .then((data) => {
+        this.setState({ userId: data.data[0].id}, () => this.showVideoList());
+      })
   }
 
   showVideoList() {
@@ -69,43 +70,43 @@ class OwnerHomepage extends React.Component {
 
   sendToSelectedVideo(video) {
     this.props.history.push({
-        pathname: '/owner/video',
-        video: video, 
-        userId: this.state.userId
-      })
+      pathname: '/owner/video',
+      video: video, 
+      userId: this.state.userId
+    });
   }
 
   getYouTubeVideos(query) {
-    axios.get('/owner/searchYouTube', {params: {query: query}})
-    .then(({data}) => {
-      this.setState({
-        searchedVideos: data,
-        selectedSeries: 'All Videos',
-      })
-    })
+    axios
+      .get('/owner/searchYouTube', {params: {query: query}})
+      .then(({data}) => {
+        this.setState({
+          searchedVideos: data,
+          selectedSeries: 'All Videos',
+        });
+      });
   }
 
   saveVideo(video) {
-    axios.post('/owner/video', {video: video, userId: this.state.userId})
-    .then(() => {
-      console.log('Video saved.');
-      this.showVideoList();
-    })
-    .catch((err) => {
-      console.log(err);
-    })
+    axios
+      .post('/owner/video', {video: video, userId: this.state.userId})
+      .then(() => {
+        this.showVideoList();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   deleteVideo(video) {
-    console.log('firing delete video!');
-    axios.delete('/owner/video', {params: {video: video, userId: this.state.userId}})
-    .then(() => {
-      console.log('Video deleted');
-      this.showVideoList();
-    })
-    .catch((err) => {
-      console.log(err);
-    })
+    axios
+      .delete('/owner/video', { params: { video: video, userId: this.state.userId }})
+      .then(() => {
+        this.showVideoList();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   }
 
   handleChange(event, index, value) {
@@ -140,9 +141,8 @@ class OwnerHomepage extends React.Component {
   }
 
   removeFromSeries(video) {
-    console.log('firing remove from series!!');
-    console.log(video);
-    axios.delete('/owner/build', { params: { video }})
+    axios
+      .delete('/owner/build', { params: { video }})
       .then(result => {
         let allVideos = this.state.allVideos;
 
@@ -156,7 +156,7 @@ class OwnerHomepage extends React.Component {
         this.setState((prevState) => ({
           videos: prevState.videos.filter((item, i) => item.id !== video.id),
           allVideos: allVideos,
-        }), console.log(this.state));
+        }));
       })
       .catch(err => {
         console.log(err);
@@ -202,7 +202,7 @@ class OwnerHomepage extends React.Component {
         </div>  
       </div>   
       </Paper>
-    )
+    );
   }
 }
 
@@ -213,13 +213,13 @@ const style = {
   textAlign: 'center',
   display: 'inline-block',
   padding: '30px',
-  background: '#D8E4EA'
+  background: '#D8E4EA',
 };
 
 const hidden = {
   height: '70vh',
   float: 'left',
-  width: '40%'
+  width: '40%',
 };
 
 const searchStyle = {

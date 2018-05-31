@@ -16,7 +16,7 @@ class LandingPage extends React.Component {
 
     this.state = {
       username: '',
-    }
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
@@ -24,11 +24,12 @@ class LandingPage extends React.Component {
   }
 
   handleChange(input) {
-    this.setState({username: input})
+    this.setState({ username: input });
   }
 
   handleLogin() {
-    axios.post('/login', {username: this.state.username})
+    axios
+      .post('/login', { username: this.state.username })
       .then((response) => {
         const isAuthenticated = !!response.data.length;
 
@@ -54,7 +55,7 @@ class LandingPage extends React.Component {
     this.props.history.push({
       pathname: path,
       username: username,
-    })
+    });
   }
 
   render () {
@@ -88,7 +89,7 @@ class LandingPage extends React.Component {
           </Paper>
 
       </Paper>
-    )
+    );
   }
 
 }

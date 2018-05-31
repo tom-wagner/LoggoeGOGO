@@ -6,9 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const searchSource = {
   beginDrag(props) {
-    console.log('begin dragging', props)
-    const item = {item: props.video}
-    console.log(item)
+    const item = { item: props.video };
     return item;
   }
 };
@@ -16,8 +14,8 @@ const searchSource = {
 function collect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  }
+    isDragging: monitor.isDragging(),
+  };
 }
 
 class SearchListEntry extends React.Component {
@@ -26,26 +24,26 @@ class SearchListEntry extends React.Component {
     const { isDragging, connectDragSource, video, save, redirect } = this.props
     return connectDragSource(
       <div>
-      <Paper style={style}>
-        <div style={{display: 'inline-block'}}>
-          <div style={{width: '30%', float: 'left'}}>
-            <img className="media-object" 
-              src={video.snippet.thumbnails.default.url} 
-              alt="" />
+        <Paper style={style}>
+          <div style={{display: 'inline-block'}}>
+            <div style={{width: '30%', float: 'left'}}>
+              <img className="media-object" 
+                src={video.snippet.thumbnails.default.url} 
+                alt="" />
+            </div>
+            <div style={{width: '50%', float: 'right', wordWrap: 'break-word'}}>
+              <div style={{fontWeight: 'bold'}}> {video.snippet.title} </div>
+              <br/>
+              <div style={{color: 'grey'}}> {video.snippet.description} </div>
+              <br/>
+              <RaisedButton onClick={() => {save(video)}} style={{padding: '5px'}}>
+                Save to Videos
+              </RaisedButton>
+            </div>
           </div>
-          <div style={{width: '50%', float: 'right', wordWrap: 'break-word'}}>
-            <div style={{fontWeight: 'bold'}}> {video.snippet.title} </div>
-            <br/>
-            <div style={{color: 'grey'}}> {video.snippet.description} </div>
-            <br/>
-            <RaisedButton onClick={() => {save(video)}} style={{padding: '5px'}}>
-              Save to Videos
-            </RaisedButton>
-          </div>
-        </div>
-      </Paper>
+        </Paper>
       </div>
-    )
+    );
   }
 }
 
@@ -57,7 +55,7 @@ const style = {
   display: 'block',
   padding: '30px 5px',
   wordWrap: 'break-word',
-  cursor: 'move'
-}
+  cursor: 'move',
+};
 
 export default DragSource(ItemTypes.VIDEO, searchSource, collect) (SearchListEntry);

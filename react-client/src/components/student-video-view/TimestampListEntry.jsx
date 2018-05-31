@@ -9,16 +9,16 @@ class TimestampListEntry extends React.Component {
   constructor(props) {
     super(props)
     
-    this.onDeleteTimestamp = this.onDeleteTimestamp.bind(this)
-    this.onChangeVideo = this.onChangeVideo.bind(this)
+    this.onDeleteTimestamp = this.onDeleteTimestamp.bind(this);
+    this.onChangeVideo = this.onChangeVideo.bind(this);
   }
 
   onChangeVideo() {
-    this.props.changeVideo(this.props.timestamp.timestamp)
+    this.props.changeVideo(this.props.timestamp.timestamp);
   }
 
   onDeleteTimestamp() {
-    this.props.deleteTimestamp(this.props.timestamp.id)
+    this.props.deleteTimestamp(this.props.timestamp.id);
   }
   
   render() {
@@ -61,7 +61,7 @@ const style = {
   width: '80%', 
   margin: '10px', 
   padding: '20px', 
-  float: 'left'
-}
+  float: 'left',
+};
 
 export default TimestampListEntry;

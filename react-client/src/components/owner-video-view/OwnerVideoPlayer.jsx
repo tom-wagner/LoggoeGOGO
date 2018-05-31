@@ -16,7 +16,7 @@ class OwnerVideoPlayer extends React.Component {
     this.state = { 
       videoId: this.props.videoId,
       video: this.props.video,
-      player: null
+      player: null,
     };
 
     this.onReady = this.onReady.bind(this);
@@ -39,16 +39,14 @@ class OwnerVideoPlayer extends React.Component {
     this.state.player.pauseVideo();
   }
 
-
   deleteComment(comment) {
     axios.delete('/owner/comment', {params: {comment: comment}})
     .then(() => {
-      console.log('Successfully deleted comment');
       this.props.getComments();
     })
     .catch((err) => {
       console.log(err);
-    })
+    });
   }
   
   render() {
@@ -58,7 +56,7 @@ class OwnerVideoPlayer extends React.Component {
       playerVars: {
         autoplay: 1,
         start: this.props.startingTimestamp,
-      }
+      },
     };
 
     return (
@@ -93,6 +91,5 @@ class OwnerVideoPlayer extends React.Component {
     );
   }
 }
-
 
 export default OwnerVideoPlayer;

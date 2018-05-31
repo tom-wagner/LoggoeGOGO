@@ -19,7 +19,6 @@ function Random_normal_Dist(mean, sd, min_x, max_x, weight) {
 }
 
 function plot_gmm_data(means, sds, weights, X, hardClusters, duration, comments) {
-    console.log('DURATION', duration);
     let normals = means
         .map((m, i) => (Random_normal_Dist(m, sds[i], 0, duration, weights[i])));
     let data = X.map((x_i, i) => ({
@@ -30,7 +29,6 @@ function plot_gmm_data(means, sds, weights, X, hardClusters, duration, comments)
 }
 
 function plotNormals(normals, data, duration, comments) {
-    console.log('PLOTTING', normals, data);
     var margin = {top: 20, right: 30, bottom: 30, left: 40},
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
@@ -166,18 +164,16 @@ class Visualization extends React.Component {
   componentDidMount() {
     const VIDEO_ID = this.props.videoId || 'ZK3O402wf1c';
 
-    axios.get('/vis-data', {params: {videoId: VIDEO_ID}})
-    .then(res => {
-        console.log('got data', res);
-        console.log('Video length:', res.data.length);
-        let data = res.data.data;
-        let comments = res.data.comments;
-        console.log('COMMENTS', comments);
-        plot_gmm_data(data[0], data[1], data[2], data[3], data[4], res.data.length, comments);
-    })
-    .catch(err => {
-        console.log('error getting data', err);
-    });
+    axios
+        .get('/vis-data', { params: { videoId: VIDEO_ID }})
+        .then(res => {
+            let data = res.data.data;
+            let comments = res.data.comments;
+            plot_gmm_data(data[0], data[1], data[2], data[3], data[4], res.data.length, comments);
+        })
+        .catch(err => {
+            console.log('error getting data', err);
+        });
   }
 
   render() {
@@ -185,7 +181,6 @@ class Visualization extends React.Component {
         <svg id="vis-svg"/>
     );
   }
-
 }
 
 

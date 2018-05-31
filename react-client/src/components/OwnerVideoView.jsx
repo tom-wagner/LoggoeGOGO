@@ -19,7 +19,7 @@ class OwnerVideo extends React.Component {
       timeStamps: [],
       comments: [],
       startingTimestamp: 0,
-      showCommentForm: false
+      showCommentForm: false,
     };
     this.saveComment = this.saveComment.bind(this);
     this.getComments = this.getComments.bind(this);
@@ -135,12 +135,6 @@ class OwnerVideo extends React.Component {
                 />
               </Paper>
               <br />
-              {/* <Paper style={{padding: '20px'}}>
-                <div>
-                  {this.state.timeStamps.length !== 0 && <Analytics timeStamps={this.state.timeStamps} video={this.props.location.video}/>}
-                </div>
-              </Paper>
-               */}
             </div>
             <Paper style={style3}>
               <div>
@@ -168,13 +162,13 @@ const style = {
   display: 'inline-block',
   padding: '30px',
   background: '#D8E4EA'
-}
+};
 
 const style2 = {
   width: 'auto', 
   float: 'left', 
   margin: '20px',
-}
+};
 
 const style3 = {
   width: '30%', 
@@ -182,6 +176,6 @@ const style3 = {
   textAlign: 'left', 
   margin: '20px',
   padding: '20px',
-}
+};
 
 export default withRouter(OwnerVideo);

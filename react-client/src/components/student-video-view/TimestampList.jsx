@@ -15,7 +15,6 @@ class TimestampList extends React.Component {
     return (
       <div style={msgContainerStyle}>
           <div style={overflowStyle}>
-          {console.log(this.props.timestamps)}
           {this.props.timestamps.map((timestamp, index) => {
             return <TimestampListEntry 
             key={index} 
@@ -31,13 +30,13 @@ class TimestampList extends React.Component {
 }
 const msgContainerStyle = {
   border: "1px black solid",
-  height: "60vh"
+  height: "60vh",
 };
 
 
 const overflowStyle = {
   overflowY: "auto",
-  height: "100%"
+  height: "100%",
 };
 
 export default TimestampList;
